@@ -1,89 +1,96 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { properties } from "../data/properties";
-import { serviceApartments } from "../data/serviceApartments";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { properties as allProperties } from "../data/properties";
 
 const PropertyContext = createContext();
 
 export const PropertyProvider = ({ children }) => {
+  const [properties, setProperties] = useState(allProperties);
+  const [filteredProperties, setFilteredProperties] = useState(allProperties);
   const [wishlist, setWishlist] = useState(() => {
-    const saved = localStorage.getItem("bani-wishlist");
-    return saved ? JSON.parse(saved) : [];
+    try {
+      return JSON.parse(localStorage.getItem("baniEstate_wishlist")) || [];
+    } catch {
+      return [];
+    }
   });
-  const [searchFilters, setSearchFilters] = useState({
-    type: "",
-    location: "Sector 107, Noida",
-    budget: "",
-    beds: "",
-  });
-  const [filteredProperties, setFilteredProperties] = useState(properties);
-  const [activeFilter, setActiveFilter] = useState("All");
   const [isLoading, setIsLoading] = useState(false);
+  const [activeFilters, setActiveFilters] = useState({});
 
   useEffect(() => {
-    localStorage.setItem("bani-wishlist", JSON.stringify(wishlist));
+    localStorage.setItem("baniEstate_wishlist", JSON.stringify(wishlist));
   }, [wishlist]);
 
-  const toggleWishlist = (propertyId) => {
-    setWishlist((prev) =>
-      prev.includes(propertyId)
-        ? prev.filter((id) => id !== propertyId)
-        : [...prev, propertyId]
-    );
-  };
+  const getPropertiesByType = useCallback(
+    (type) => {
+      if (!type || type === "All") return properties;
+      return properties.filter((p) => p.type === type);
+    },
+    [properties]
+  );
 
-  const isInWishlist = (propertyId) => wishlist.includes(propertyId);
-
-  const applyFilters = (filters) => {
+  const applyFilters = useCallback((filters) => {
     setIsLoading(true);
-    setSearchFilters(filters);
+    setActiveFilters(filters);
     setTimeout(() => {
-      let result = properties;
+      let result = [...allProperties];
       if (filters.type && filters.type !== "All") {
         result = result.filter((p) => p.type === filters.type);
       }
+      if (filters.status && filters.status !== "All") {
+        if (filters.status === "buy" || filters.status === "For Sale") {
+          result = result.filter((p) => p.status === "For Sale");
+        } else if (filters.status === "rent" || filters.status === "For Rent") {
+          result = result.filter((p) => p.status === "For Rent");
+        }
+      }
       if (filters.budget) {
-        const budgetMap = {
-          "under-40": [0, 4000000],
-          "40-80": [4000000, 8000000],
-          "80-150": [8000000, 15000000],
-          "above-150": [15000000, Infinity],
-        };
-        const [min, max] = budgetMap[filters.budget] || [0, Infinity];
-        result = result.filter((p) => p.price >= min && p.price <= max);
+        if (filters.budget === "under-40") result = result.filter((p) => p.price < 4000000);
+        else if (filters.budget === "40-80") result = result.filter((p) => p.price >= 4000000 && p.price <= 8000000);
+        else if (filters.budget === "80-150") result = result.filter((p) => p.price > 8000000 && p.price <= 15000000);
+        else if (filters.budget === "above-150") result = result.filter((p) => p.price > 15000000);
       }
       if (filters.beds) {
-        result = result.filter((p) => p.beds === parseInt(filters.beds));
+        result = result.filter((p) => p.beds === Number(filters.beds));
       }
       setFilteredProperties(result);
       setIsLoading(false);
-    }, 500);
-  };
+    }, 400);
+  }, []);
 
-  const getPropertyById = (id) => properties.find((p) => p.id === parseInt(id));
-  const getServiceApartmentById = (id) =>
-    serviceApartments.find((a) => a.id === parseInt(id));
-  const getPropertiesByType = (type) =>
-    type === "All" ? properties : properties.filter((p) => p.type === type);
-  const getFeaturedProperties = () => properties.filter((p) => p.featured);
+  const toggleWishlist = useCallback((id) => {
+    setWishlist((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  }, []);
+
+  const isInWishlist = useCallback(
+    (id) => wishlist.includes(id),
+    [wishlist]
+  );
+
+  const getPropertyById = useCallback(
+    (id) => allProperties.find((p) => p.id === Number(id)),
+    []
+  );
+
+  const getFeaturedProperties = useCallback(
+    () => allProperties.filter((p) => p.featured),
+    []
+  );
 
   return (
     <PropertyContext.Provider
       value={{
         properties,
-        serviceApartments,
         filteredProperties,
         wishlist,
-        searchFilters,
-        activeFilter,
         isLoading,
-        setActiveFilter,
+        activeFilters,
+        getPropertiesByType,
+        applyFilters,
         toggleWishlist,
         isInWishlist,
-        applyFilters,
-        setSearchFilters,
         getPropertyById,
-        getServiceApartmentById,
-        getPropertiesByType,
         getFeaturedProperties,
       }}
     >
@@ -93,9 +100,7 @@ export const PropertyProvider = ({ children }) => {
 };
 
 export const useProperty = () => {
-  const context = useContext(PropertyContext);
-  if (!context) throw new Error("useProperty must be used within PropertyProvider");
-  return context;
+  const ctx = useContext(PropertyContext);
+  if (!ctx) throw new Error("useProperty must be used within PropertyProvider");
+  return ctx;
 };
-
-export default PropertyContext;

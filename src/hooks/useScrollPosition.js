@@ -1,19 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-const useScrollPosition = () => {
-  const [scrollY, setScrollY] = useState(0);
+export const useScrollPosition = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-      setIsScrolled(window.scrollY > 80);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  if (typeof window !== "undefined") {
+    window.addEventListener("scroll", () => {
+      setIsScrolled(window.scrollY > 50);
+    });
+  }
 
-  return { scrollY, isScrolled };
+  return { isScrolled };
 };
 
 export default useScrollPosition;

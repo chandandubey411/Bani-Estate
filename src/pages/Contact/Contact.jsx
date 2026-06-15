@@ -63,7 +63,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-gray-800 text-xs">Our Office Address</h4>
-                    <p className="mt-0.5 leading-relaxed">Suite 204, Tower A, Sector 107, Noida, Uttar Pradesh – 201301</p>
+                    <p className="mt-0.5 leading-relaxed">Shop no -1, Ground floor, Suman Enclave, Plot no-43, Sector 107, Noida, Uttar Pradesh 201304</p>
                   </div>
                 </div>
 
@@ -72,9 +72,8 @@ const Contact = () => {
                     <FaPhoneAlt />
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-800 text-xs">Phone Numbers</h4>
-                    <p className="mt-0.5">+91 98765 43210</p>
-                    <p className="text-gray-400 text-xs">+91 98765 43211</p>
+                    <h4 className="font-bold text-gray-800 text-xs">Phone Number</h4>
+                    <p className="mt-0.5">088265 08087</p>
                   </div>
                 </div>
 
@@ -83,9 +82,8 @@ const Contact = () => {
                     <FaEnvelope />
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-800 text-xs">Email Addresses</h4>
-                    <p className="mt-0.5">info@baniestate.com</p>
-                    <p className="text-gray-400 text-xs">support@baniestate.com</p>
+                    <h4 className="font-bold text-gray-800 text-xs">Email Address</h4>
+                    <p className="mt-0.5">baniestate20@gmail.com</p>
                   </div>
                 </div>
 
@@ -104,7 +102,7 @@ const Contact = () => {
               {/* WhatsApp Redirect */}
               <div className="pt-4 border-t border-gray-100">
                 <a
-                  href="https://wa.me/919876543210?text=Hi%20Bani%20Estate,%20I%20have%20an%20inquiry%20regarding%20Sector%20107%20Noida%20properties."
+                  href="https://wa.me/918826508087?text=Hi%20Bani%20Estate,%20I%20have%20an%20inquiry%20regarding%20Sector%20107%20Noida%20properties."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-2 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-all shadow-md"

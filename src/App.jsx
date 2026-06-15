@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import { PropertyProvider } from "./context/PropertyContext";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
+import FloatingWhatsApp from "./components/FloatingWhatsApp/FloatingWhatsApp";
 
 // Pages
 import Home from "./pages/Home/Home";
@@ -72,6 +73,7 @@ function App() {
             </Routes>
           </div>
           <Footer />
+          <FloatingWhatsApp />
         </div>
       </Router>
     </PropertyProvider>
