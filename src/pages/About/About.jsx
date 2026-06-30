@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { FaCheckCircle, FaArrowRight } from "react-icons/fa";
+import { FaCheckCircle, FaArrowRight, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import AgentCard from "../../components/AgentCard/AgentCard";
 import { agents } from "../../data/agents";
+import baniEstateVideo from "../../assets/bani estate.mp4";
 
 const achievements = [
   { value: "500+", label: "Happy Clients" },
@@ -14,8 +15,10 @@ const achievements = [
   { value: "100%", label: "Verified Properties" },
 ];
 
-const About = () => (
-  <main className="pt-20">
+const About = () => {
+  const [isMuted, setIsMuted] = useState(true);
+  return (
+    <main className="pt-20">
     {/* Hero */}
     <div className="relative py-16 sm:py-24 overflow-hidden">
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=70')` }} />
@@ -50,8 +53,22 @@ const About = () => (
               ))}
             </div>
           </motion.div>
-          <motion.div className="rounded-2xl overflow-hidden shadow-2xl" initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-            <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800" alt="About Bani Estate" className="w-full h-64 sm:h-80 lg:h-96 object-cover" loading="lazy" />
+          <motion.div className="relative rounded-2xl overflow-hidden shadow-2xl bg-black group" initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+            <video
+              src={baniEstateVideo}
+              autoPlay
+              muted={isMuted}
+              loop
+              playsInline
+              className="w-full h-auto object-contain"
+            />
+            <button
+              onClick={() => setIsMuted(!isMuted)}
+              className="absolute bottom-4 right-4 z-20 p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-sm border border-white/10 transition-all duration-300 shadow-lg"
+              title={isMuted ? "Unmute" : "Mute"}
+            >
+              {isMuted ? <FaVolumeMute size={18} /> : <FaVolumeUp size={18} />}
+            </button>
           </motion.div>
         </div>
       </div>
@@ -110,6 +127,7 @@ const About = () => (
       </div>
     </section>
   </main>
-);
+  );
+};
 
 export default About;
