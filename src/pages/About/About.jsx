@@ -53,7 +53,7 @@ const About = () => {
               ))}
             </div>
           </motion.div>
-          <motion.div className="relative rounded-2xl overflow-hidden shadow-2xl bg-black group" initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-black group">
             <video
               src={baniEstateVideo}
               autoPlay
@@ -69,7 +69,7 @@ const About = () => {
             >
               {isMuted ? <FaVolumeMute size={18} /> : <FaVolumeUp size={18} />}
             </button>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
